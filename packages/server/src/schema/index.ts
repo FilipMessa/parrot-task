@@ -8,9 +8,12 @@ import {
   arg,
   asNexusMethod,
   enumType,
+  subscriptionType,
 } from 'nexus';
 import { DateTimeResolver } from 'graphql-scalars';
-import { Context } from './context';
+import { Context } from '../context';
+
+import * as types from './types';
 
 export const DateTime = asNexusMethod(DateTimeResolver, 'date');
 
@@ -20,6 +23,7 @@ const Query = objectType({
     t.nonNull.list.nonNull.field('allUsers', {
       type: 'User',
       resolve: (_parent, _args, context: Context) => {
+        context.pubsub.publish('bookTitleChanged', 'someone ase');
         return context.prisma.user.findMany();
       },
     });
@@ -276,25 +280,65 @@ const UserCreateInput = inputObjectType({
   },
 });
 
+// const Query = objectType({
+//   name: 'Query',
+//   definition(t) {
+//     t.nonNull.list.nonNull.field('allUsers', {
+//       type: 'User',
+//       resolve: (_parent, _args, context: Context) => {
+//         return context.prisma.user.findMany();
+//       },
+//     });
+
+//     t.nullable.field('postById', {
+//       type: 'Post',
+//       args: {
+//         id: intArg(),
+//       },
+
+const Subscription = subscriptionType({
+  definition(t) {
+    t.string('truths', {
+      subscribe(parent, _, context: Context) {
+        return context.pubsub.asyncIterator(['bookTitleChanged']);
+        // return (async function* () {
+        //   while (true) {
+        //     await new Promise((res) => setTimeout(res, 1000));
+        //     yield Math.random() > 0.5;
+        //   }
+        // })();
+      },
+      resolve(eventData: string) {
+        return eventData;
+      },
+    });
+  },
+});
+// 		} });
+// t.nonNull.field('PostFeed', {
+//   type: 'Post',
+//   resolve: (_parent, args, context: Context) => {
+//     return context.prisma.post.findUnique({
+//       where: { id: args.id || undefined },
+//     });
+//   },
+//     // });
+//   },
+// });
+
+export const RecordState = enumType({
+  name: 'RecordState',
+  members: ['new', 'transcripting', 'transcripted', 'failed', 'picked', 'finished'],
+});
+
 export const schema = makeSchema({
-  types: [
-    Query,
-    Mutation,
-    Post,
-    User,
-    UserUniqueInput,
-    UserCreateInput,
-    PostCreateInput,
-    SortOrder,
-    PostOrderByUpdatedAtInput,
-    DateTime,
-  ],
+  types,
   outputs: {
     schema: __dirname + '/../schema.graphql',
-    typegen: __dirname + '/generated/nexus.ts',
+    typegen: __dirname + '/__generated/nexus.ts',
   },
   contextType: {
-    module: require.resolve('./context'),
+    module: require.resolve('../context'),
     export: 'Context',
   },
   sourceTypes: {
@@ -306,3 +350,4 @@ export const schema = makeSchema({
     ],
   },
 });
+

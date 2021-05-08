@@ -47,6 +47,10 @@ enum SortOrder {
   desc
 }
 
+type Subscription {
+  truths: String
+}
+
 type User {
   email: String!
   id: Int!

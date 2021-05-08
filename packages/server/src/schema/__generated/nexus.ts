@@ -4,7 +4,7 @@
  */
 
 
-import { Context } from "./../context"
+import { Context } from "./../../context"
 import { core } from "nexus"
 declare global {
   interface NexusGenCustomInputMethods<TypeName extends string> {
@@ -29,26 +29,10 @@ declare global {
 }
 
 export interface NexusGenInputs {
-  PostCreateInput: { // input type
-    content?: string | null; // String
-    title: string; // String!
-  }
-  PostOrderByUpdatedAtInput: { // input type
-    updatedAt: NexusGenEnums['SortOrder']; // SortOrder!
-  }
-  UserCreateInput: { // input type
-    email: string; // String!
-    name?: string | null; // String
-    posts?: NexusGenInputs['PostCreateInput'][] | null; // [PostCreateInput!]
-  }
-  UserUniqueInput: { // input type
-    email?: string | null; // String
-    id?: number | null; // Int
-  }
 }
 
 export interface NexusGenEnums {
-  SortOrder: "asc" | "desc"
+  RecordState: "failed" | "finished" | "new" | "picked" | "transcripted" | "transcripting"
 }
 
 export interface NexusGenScalars {
@@ -61,21 +45,13 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
-  Mutation: {};
-  Post: { // root type
-    content?: string | null; // String
-    createdAt: NexusGenScalars['DateTime']; // DateTime!
-    id: number; // Int!
-    published: boolean; // Boolean!
-    title: string; // String!
-    updatedAt: NexusGenScalars['DateTime']; // DateTime!
-    viewCount: number; // Int!
-  }
   Query: {};
-  User: { // root type
-    email: string; // String!
-    id: number; // Int!
-    name?: string | null; // String
+  Record: { // root type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    id: string; // String!
+    name: string; // String!
+    state: NexusGenEnums['RecordState']; // RecordState!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
 }
 
@@ -90,102 +66,32 @@ export type NexusGenRootTypes = NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars & NexusGenEnums
 
 export interface NexusGenFieldTypes {
-  Mutation: { // field return type
-    createDraft: NexusGenRootTypes['Post'] | null; // Post
-    deletePost: NexusGenRootTypes['Post'] | null; // Post
-    incrementPostViewCount: NexusGenRootTypes['Post'] | null; // Post
-    signupUser: NexusGenRootTypes['User']; // User!
-    togglePublishPost: NexusGenRootTypes['Post'] | null; // Post
-  }
-  Post: { // field return type
-    author: NexusGenRootTypes['User'] | null; // User
-    content: string | null; // String
-    createdAt: NexusGenScalars['DateTime']; // DateTime!
-    id: number; // Int!
-    published: boolean; // Boolean!
-    title: string; // String!
-    updatedAt: NexusGenScalars['DateTime']; // DateTime!
-    viewCount: number; // Int!
-  }
   Query: { // field return type
-    allUsers: NexusGenRootTypes['User'][]; // [User!]!
-    draftsByUser: Array<NexusGenRootTypes['Post'] | null> | null; // [Post]
-    feed: NexusGenRootTypes['Post'][]; // [Post!]!
-    postById: NexusGenRootTypes['Post'] | null; // Post
+    ok: boolean; // Boolean!
   }
-  User: { // field return type
-    email: string; // String!
-    id: number; // Int!
-    name: string | null; // String
-    posts: NexusGenRootTypes['Post'][]; // [Post!]!
+  Record: { // field return type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    id: string; // String!
+    name: string; // String!
+    state: NexusGenEnums['RecordState']; // RecordState!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
 }
 
 export interface NexusGenFieldTypeNames {
-  Mutation: { // field return type name
-    createDraft: 'Post'
-    deletePost: 'Post'
-    incrementPostViewCount: 'Post'
-    signupUser: 'User'
-    togglePublishPost: 'Post'
-  }
-  Post: { // field return type name
-    author: 'User'
-    content: 'String'
-    createdAt: 'DateTime'
-    id: 'Int'
-    published: 'Boolean'
-    title: 'String'
-    updatedAt: 'DateTime'
-    viewCount: 'Int'
-  }
   Query: { // field return type name
-    allUsers: 'User'
-    draftsByUser: 'Post'
-    feed: 'Post'
-    postById: 'Post'
+    ok: 'Boolean'
   }
-  User: { // field return type name
-    email: 'String'
-    id: 'Int'
+  Record: { // field return type name
+    createdAt: 'DateTime'
+    id: 'String'
     name: 'String'
-    posts: 'Post'
+    state: 'RecordState'
+    updatedAt: 'DateTime'
   }
 }
 
 export interface NexusGenArgTypes {
-  Mutation: {
-    createDraft: { // args
-      authorEmail: string; // String!
-      data: NexusGenInputs['PostCreateInput']; // PostCreateInput!
-    }
-    deletePost: { // args
-      id: number; // Int!
-    }
-    incrementPostViewCount: { // args
-      id: number; // Int!
-    }
-    signupUser: { // args
-      data: NexusGenInputs['UserCreateInput']; // UserCreateInput!
-    }
-    togglePublishPost: { // args
-      id: number; // Int!
-    }
-  }
-  Query: {
-    draftsByUser: { // args
-      userUniqueInput: NexusGenInputs['UserUniqueInput']; // UserUniqueInput!
-    }
-    feed: { // args
-      orderBy?: NexusGenInputs['PostOrderByUpdatedAtInput'] | null; // PostOrderByUpdatedAtInput
-      searchString?: string | null; // String
-      skip?: number | null; // Int
-      take?: number | null; // Int
-    }
-    postById: { // args
-      id?: number | null; // Int
-    }
-  }
 }
 
 export interface NexusGenAbstractTypeMembers {
@@ -196,7 +102,7 @@ export interface NexusGenTypeInterfaces {
 
 export type NexusGenObjectNames = keyof NexusGenObjects;
 
-export type NexusGenInputNames = keyof NexusGenInputs;
+export type NexusGenInputNames = never;
 
 export type NexusGenEnumNames = keyof NexusGenEnums;
 
