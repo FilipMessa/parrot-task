@@ -8,6 +8,7 @@
 		"exclude": ["node_modules", "build"]
 	},
 	"rules": {
+		"no-duplicate-variable": true,
 		"object-literal-sort-keys": false,
 		"interface-name": [true, "never-prefix"],
 		"prettier": [

@@ -32,7 +32,6 @@ export interface NexusGenInputs {
 }
 
 export interface NexusGenEnums {
-  RecordState: "failed" | "finished" | "new" | "picked" | "transcripted" | "transcripting"
 }
 
 export interface NexusGenScalars {
@@ -50,9 +49,10 @@ export interface NexusGenObjects {
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
     name: string; // String!
-    state: NexusGenEnums['RecordState']; // RecordState!
+    state: string; // String!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
+  Subscription: {};
 }
 
 export interface NexusGenInterfaces {
@@ -63,31 +63,37 @@ export interface NexusGenUnions {
 
 export type NexusGenRootTypes = NexusGenObjects
 
-export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars & NexusGenEnums
+export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
   Query: { // field return type
-    ok: boolean; // Boolean!
+    getAllRecords: Array<NexusGenRootTypes['Record'] | null> | null; // [Record]
   }
   Record: { // field return type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
     name: string; // String!
-    state: NexusGenEnums['RecordState']; // RecordState!
+    state: string; // String!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
+  }
+  Subscription: { // field return type
+    truths: boolean | null; // Boolean
   }
 }
 
 export interface NexusGenFieldTypeNames {
   Query: { // field return type name
-    ok: 'Boolean'
+    getAllRecords: 'Record'
   }
   Record: { // field return type name
     createdAt: 'DateTime'
     id: 'String'
     name: 'String'
-    state: 'RecordState'
+    state: 'String'
     updatedAt: 'DateTime'
+  }
+  Subscription: { // field return type name
+    truths: 'Boolean'
   }
 }
 
@@ -104,7 +110,7 @@ export type NexusGenObjectNames = keyof NexusGenObjects;
 
 export type NexusGenInputNames = never;
 
-export type NexusGenEnumNames = keyof NexusGenEnums;
+export type NexusGenEnumNames = never;
 
 export type NexusGenInterfaceNames = never;
 

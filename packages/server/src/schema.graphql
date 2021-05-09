@@ -8,22 +8,17 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 scalar DateTime
 
 type Query {
-  ok: Boolean!
+  getAllRecords: [Record]
 }
 
 type Record {
   createdAt: DateTime!
   id: String!
   name: String!
-  state: RecordState!
+  state: String!
   updatedAt: DateTime!
 }
 
-enum RecordState {
-  failed
-  finished
-  new
-  picked
-  transcripted
-  transcripting
+type Subscription {
+  truths: Boolean
 }
