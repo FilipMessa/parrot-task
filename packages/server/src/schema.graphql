@@ -20,5 +20,5 @@ type Record {
 }
 
 type Subscription {
-  truths: Boolean
+  truths: String
 }

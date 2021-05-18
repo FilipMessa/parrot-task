@@ -1,8 +1,8 @@
 {
   "name": "server",
-	"private": "true",
-	"version": "0.0.1",
-	"scripts": {
+  "private": "true",
+  "version": "0.0.1",
+  "scripts": {
     "dev": "ts-node-dev --no-notify --respawn --transpile-only src/server",
     "start": "node dist/server",
     "clean": "rm -rf dist",

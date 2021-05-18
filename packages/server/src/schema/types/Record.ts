@@ -30,17 +30,17 @@ export const getAllRecordsQuery = queryType({
 
 export const Subscription = subscriptionType({
   definition(t) {
-    t.boolean('truths', {
+    t.string('truths', {
       subscribe(parent, _, context: Context) {
         // return context.pubsub.asyncIterator(['bookTitleChanged']);
         return (async function* () {
           while (true) {
             await new Promise((res) => setTimeout(res, 1000));
-            yield Math.random() > 0.5;
+            yield Math.random();
           }
         })();
       },
-      resolve(eventData: boolean) {
+      resolve(eventData: any) {
         return eventData;
       },
     });

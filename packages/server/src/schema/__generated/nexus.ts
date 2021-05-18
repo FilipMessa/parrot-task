@@ -77,7 +77,7 @@ export interface NexusGenFieldTypes {
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   Subscription: { // field return type
-    truths: boolean | null; // Boolean
+    truths: string | null; // String
   }
 }
 
@@ -93,7 +93,7 @@ export interface NexusGenFieldTypeNames {
     updatedAt: 'DateTime'
   }
   Subscription: { // field return type name
-    truths: 'Boolean'
+    truths: 'String'
   }
 }
 

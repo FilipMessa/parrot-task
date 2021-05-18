@@ -1,5 +1,9 @@
 import React from 'react';
 import logo from './logo.svg';
+// tslint:disable-next-line: no-submodule-imports
+import 'antd/dist/antd.css';
+import { Button, DatePicker } from 'antd';
+
 import './App.css';
 import { useQuery, useSubscription, gql } from '@apollo/client';
 import { AppQuery } from './__generated__/AppQuery';
@@ -29,7 +33,7 @@ export function App() {
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <span>{d?.truths ? 'yes' : 'n'}</span>
+        <span>{d?.truths}</span>
         <p>
           <ul>
             {data?.getAllRecords?.map((i) => (
@@ -37,6 +41,10 @@ export function App() {
             ))}
           </ul>
         </p>
+        <DatePicker />
+        <Button type="primary" style={{ marginLeft: 8 }}>
+          Primary Button
+        </Button>
         <a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
           Learn React
         </a>
